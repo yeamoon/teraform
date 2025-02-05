@@ -23,17 +23,15 @@ jobs:
       uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
+        # Initialize Terraform
+    - name: Initialize Terraform
+      run: terraform -chdir=terraform init
     - name: Terraform Plan
       run: terraform plan -var="admin_password=${{ secrets.TF_VAR_admin_password }}"
 
 
-  # Initialize Terraform
-    - name: Initialize Terraform
-      run: terraform -chdir=terraform init
 
-    # Plan Terraform Changes
-    - name: Terraform Plan
-      run: terraform -chdir=terraform plan
+
 
     # Apply Terraform Changes
     - name: Terraform Apply

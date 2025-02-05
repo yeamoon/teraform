@@ -22,14 +22,4 @@ variable "vm_size" {
   default     = "Standard_B1s"
 }
 
-variable "admin_username" {
-  description = "Admin username for the VM"
-  type        = string
-  default     = "devadmin"
-}
 
-variable "admin_password" {
-  description = "Admin password for the VM"
-  type        = string
-  sensitive   = true
-}

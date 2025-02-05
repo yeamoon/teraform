@@ -34,8 +34,7 @@ apt-get install -y docker.io
 systemctl enable docker
 systemctl start docker
 
-# Add current user to Docker group (optional)
-usermod -aG docker ${var.admin_username}
+
 
 # Install Portainer
 docker volume create portainer_data

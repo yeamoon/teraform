@@ -3,11 +3,11 @@ resource "azurerm_linux_virtual_machine" "vm" {
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
   size               = var.vm_size
-  
+  admin_username     = var.admin_username
   network_interface_ids = [azurerm_network_interface.nic.id]
 
-  
-  disable_password_authentication = true
+  admin_password = var.admin_password
+  disable_password_authentication = false
 
   os_disk {
     caching              = "ReadWrite"
@@ -34,7 +34,8 @@ apt-get install -y docker.io
 systemctl enable docker
 systemctl start docker
 
-
+# Add current user to Docker group (optional)
+usermod -aG docker ${var.admin_username}
 
 # Install Portainer
 docker volume create portainer_data

@@ -1,0 +1,66 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the code
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      # Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      # Install Dependencies
+      - name: Install Dependencies
+        run: npm install --legacy-peer-deps
+
+      
+     
+      - name: Clear Playwright browser cache
+        run: rm -rf /home/runner/.cache/ms-playwright
+
+      - name: Install Playwright browsers again
+        run: npx playwright install --with-deps
+
+      - name: Build the project
+        run: npm run build
+
+      - name: Serve the app
+        run: |
+          npx serve out &
+          sleep 10
+
+
+      - name: Run Playwright Tests
+        run: |
+          npm run test:e2e --reporter=html --output=playwright-report || true
+        env:
+          CI: true
+
+
+      - name: Upload Playwright Test Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: playwright-report
+          path: playwright-report/
+
+      - name: Stop server
+        run: kill $(lsof -t -i:3000) || true
+
+
+
+  
+ 

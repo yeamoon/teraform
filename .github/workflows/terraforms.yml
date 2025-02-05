@@ -23,8 +23,9 @@ jobs:
       uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
-    - name: Set admin password
-      run: echo "admin_password=${{ secrets.TF_VAR_admin_password }}" >> $GITHUB_ENV
+    - name: Terraform Plan
+      run: terraform plan -var="admin_password=${{ secrets.TF_VAR_admin_password }}"
+
 
   # Initialize Terraform
     - name: Initialize Terraform
